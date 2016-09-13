@@ -6,14 +6,10 @@ var app = angular.module('publicArt', ["ngRoute"]);
 
 var loginApp = angular.module('loginApp', ["ngRoute"]);
 
-app.service('loginService', function($http, $q, $log) {
-    console.debug("loginService...");
-    //
-})
-.config(function($routeProvider) {
+app.config(function($routeProvider) {
     $routeProvider.when('dashboard', {templateUrl: "/dashboard.html"})
     .when('login', {
-        templateUrl: "login.html",
+        templateUrl: "/PublicArtChicago/login.html",
         controller: "loginController"
     })
     .when("/PublicArtChicago/logout", {templateUrl: "/PublicArtChicago/index.html"})
@@ -25,6 +21,14 @@ app.service('loginService', function($http, $q, $log) {
     .when("/narrators", {templateUrl: "/PublicArtChicago/view/narrators.html"})
     .otherwise({templateUrl: "/PublicArtChicago/view/welcome.html"});
 })
+.service('loginService', function($http, $q, $log) {
+    console.debug("loginService...");
+
+    $scope.login = function() {
+        console.debug("login()...");
+    };
+    //
+})
 .service('dashboardService', function($http, $q, $log) {
     console.debug("dashboardService...");
     //
@@ -35,8 +39,13 @@ app.service('loginService', function($http, $q, $log) {
 })
 .controller('loginController', function($log, $scope, loginService) {
     console.debug("loginController");
+    $scope.loginTitle = "Public Art Chicago Login";
     $scope.usernameTitle = "Username";
     $scope.passwordTitle = "Password";
+
+    $scope.login = function() {
+        console.debug("login()...");
+    };
 })
 .controller('dashboardController', function($log, $scope, dashboardService) {
     $scope.dashboardTitle = 'Public Art Chicago Dashboard';
@@ -48,7 +57,7 @@ app.service('loginService', function($http, $q, $log) {
 
     $scope.logout = function() {
         console.debug("logout()...");
-        alert("Logging out now!");
+        //alert("Logging out now!");
         location.href = 'login.html';
     };
 });

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="loginApp">
-<head>
+<html lang="en" ng-app="publicArt">
+<head ng-controller="titleController">
     <meta charset="UTF-8">
-    <title>test</title>
+    <title>{{loginTitle}}</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
@@ -12,8 +12,23 @@
     <link rel="stylesheet" href="css/signin.css">
     <link rel="stylesheet" href="css/publicartchicago.css">
 </head>
-<body>
-<span>Login...</span>
+<body ng-controller="loginController">
+
+<div class="container">
+    <form class="form-signin" action="dashboard.html">
+        <h2 class="form-signin-heading">Public Art Chicago Login</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">{{passwordTitle}}</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <button class="btn btn-lg btn-default btn-block" type="submit">Login</button>
+    </form>
+</div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
