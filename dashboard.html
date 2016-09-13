@@ -17,13 +17,13 @@
 <div id="page"> <!-- wrapper -->
     <nav id="menu" class="menu">
         <ul>
-            <li class="Label">Admin Panel</li>
-            <li><a href="#">Objects</a></li>
-            <li><a href="#">Artists</a></li>
-            <li><a href="#">Tours</a></li>
-            <li><a href="#">POIs</a></li>
-            <li><a href="#">Ads</a></li>
-            <li><a href="#">Narrators</a></li>
+            <li class="Label"><a href="/PublicArtChicago/dashboard.html">Admin Panel</a></li>
+            <li><a href="/PublicArtChicago/dashboard.html#/objects">Objects</a></li>
+            <li><a href="/PublicArtChicago/dashboard.html#/artists">Artists</a></li>
+            <li><a href="/PublicArtChicago/dashboard.html#/tours">Tours</a></li>
+            <li><a href="/PublicArtChicago/dashboard.html#/pois">POIs</a></li>
+            <li><a href="/PublicArtChicago/dashboard.html#/ads">Ads</a></li>
+            <li><a href="/PublicArtChicago/dashboard.html#/narrators">Narrators</a></li>
         </ul>
     </nav>
     <div id="header">
@@ -36,14 +36,8 @@
         </form>
     </div>
     <div id="content" class="container-fluid">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8 jumbotron">
-                <h1>Welcome Admin</h1>
-                <p>Please use the navigation drawer on the top left to navigate</p>
-            </div>
-            <div class="col-md-2"></div>
-        </div>
+        <!-- content dynamically loaded here -->
+        <ng-view />
     </div>
     <div id="footer">
         <div class="row">
@@ -72,6 +66,7 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.min.js"></script>
+<script src="js/angular-route.min.js"></script>
 
 <script src="js/publicartchicago.js"></script>
 </body>
