@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="publicArt">
+<head ng-controller="titleController">
+    <meta charset="UTF-8">
+    <meta name="MobileOptimized" content="320">
+    <meta name="HandheldFriendly" content="True">
+    <title>{{dashboardTitle}}</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/jquery.mmenu.css">
+    <link rel="stylesheet" href="css/publicartchicago.css">
+</head>
+<body ng-controller="dashboardController">
+<div id="page"> <!-- wrapper -->
+    <nav id="menu" class="menu">
+        <ul>
+            <li class="Label">Admin Panel</li>
+            <li><a href="#">Objects</a></li>
+            <li><a href="#">Artists</a></li>
+            <li><a href="#">Tours</a></li>
+            <li><a href="#">POIs</a></li>
+            <li><a href="#">Ads</a></li>
+            <li><a href="#">Narrators</a></li>
+        </ul>
+    </nav>
+    <div id="header">
+        <a href="#menu"></a>
+        Public Art Chicago Dashboard
+        <form class="header-form">
+            <input type="text" placeholder="Enter Search Term Here" />
+            <button class="btn btn-default" type="button" ng-click="search()">Search</button>
+            <button class="btn btn-default" type="button" ng-click="logout()">Logout</button>
+        </form>
+    </div>
+    <div id="content" class="container-fluid">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 jumbotron">
+                <h1>Welcome Admin</h1>
+                <p>Please use the navigation drawer on the top left to navigate</p>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+    <div id="footer">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                Copyright &copy;2016
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.mmenu.all.min.js"></script>
+<script>
+    $(function() {
+        $('nav#menu').mmenu({
+            // options
+        }, {
+            // configuration
+        });
+        $("#menu").trigger("open");
+    });
+
+
+</script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/angular.min.js"></script>
+
+<script src="js/publicartchicago.js"></script>
+</body>
+</html>
