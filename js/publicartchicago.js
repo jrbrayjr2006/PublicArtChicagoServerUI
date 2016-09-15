@@ -65,11 +65,11 @@ app.config(function($routeProvider) {
             return this.get("name");
         });
 
-        /*
-        Objects.prototype.__defineGetter__("id", function(){
-            return this.get("id");
+
+        Objects.prototype.__defineGetter__("artists", function(){
+            return this.get("artists");
         });
-        */
+
         return Objects;
     })
     .factory('Artists', function($q) {
