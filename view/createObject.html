@@ -1,0 +1,203 @@
+<form class="form-horizontal">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Create Object</legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">Object Name</label>
+            <div class="col-md-4">
+                <input id="textinput" name="textinput" placeholder="Enter object name here" class="form-control input-md" type="text">
+                <span class="help-block">The art object name should be descriptive</span>
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="artType">Art Type</label>
+            <div class="col-md-4">
+                <select id="artType" name="artType" class="form-control">
+                    <option value="1">Building</option>
+                    <option value="2">Sculpture</option>
+                    <option value="3">Mosaic</option>
+                    <option value="4">Mural</option>
+                    <option value="5">Painting</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Select Multiple -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="selectArtists">Artist(s)</label>
+            <div class="col-md-4">
+                <select id="selectArtists" name="selectArtists" class="form-control" multiple="multiple">
+                    <option value="1">Artist one</option>
+                    <option value="2">Artist two</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Select Multiple -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="selectBenefactors">Benefactor(s)</label>
+            <div class="col-md-4">
+                <select id="selectBenefactors" name="selectBenefactors" class="form-control" multiple="multiple">
+                    <option value="1">Benefactor one</option>
+                    <option value="2">Benefactor two</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Button Drop Down -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="createDateTextBtn">Creation Date</label>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input id="createDateTextBtn" name="createDateTextBtn" class="form-control" placeholder="Date object created" type="text">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            Date
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="#">Option one</a></li>
+                            <li><a href="#">Option two</a></li>
+                            <li><a href="#">Option three</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Textarea -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="descriptionTextArea">Description</label>
+            <div class="col-md-4">
+                <textarea class="form-control" id="descriptionTextArea" name="descriptionTextArea">Art object description...</textarea>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="measurements">Measurements</label>
+            <div class="col-md-4">
+                <input id="measurements" name="measurements" placeholder="Enter measurements of art object here" class="form-control input-md" type="text">
+                <span class="help-block">The measurements should include dimensions</span>
+            </div>
+        </div>
+
+        <!-- Textarea -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="historyTextArea">History Description</label>
+            <div class="col-md-4">
+                <textarea class="form-control" id="historyTextArea" name="historyTextArea">Art object history...</textarea>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="material">Material</label>
+            <div class="col-md-4">
+                <input id="material" name="material" placeholder="Material art work is made of" class="form-control input-md" type="text">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="address">Address</label>
+            <div class="col-md-4">
+                <input id="address" name="address" placeholder="Enter the address of the art object" class="form-control input-md" type="text">
+                <span class="help-block">Major street crossing may suffice if address is unknown</span>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="city">City</label>
+            <div class="col-md-4">
+                <input id="city" name="city" placeholder="Enter city where art object is located" class="form-control input-md" type="text">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="zipcode">Zip</label>
+            <div class="col-md-4">
+                <input id="zipcode" name="zipcode" placeholder="Enter Zip or Postal Code" class="form-control input-md" type="text">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="latitude">Latitude</label>
+            <div class="col-md-4">
+                <input id="latitude" name="latitude" placeholder="Enter the object latitude here" class="form-control input-md" type="text">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="longitude">Logitude</label>
+            <div class="col-md-4">
+                <input id="longitude" name="longitude" placeholder="Enter the object longitude here" class="form-control input-md" type="text">
+
+            </div>
+        </div>
+
+        <!-- Select Multiple -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="selectFunFactNarrator">Fun Fact Narrator</label>
+            <div class="col-md-4">
+                <select id="selectFunFactNarrator" name="selectFunFactNarrator" class="form-control" multiple="multiple">
+                    <option value="1">Option one</option>
+                    <option value="2">Option two</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Select Multiple -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="selectInfoNarrator">General Info Narrator</label>
+            <div class="col-md-4">
+                <select id="selectInfoNarrator" name="selectInfoNarrator" class="form-control" multiple="multiple">
+                    <option value="1">Option one</option>
+                    <option value="2">Option two</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="uploadThumbBtn">Upload Thumbnail</label>
+            <div class="col-md-4">
+                <button id="uploadThumbBtn" name="uploadThumbBtn" class="btn btn-primary">Choose Thumbnail...</button>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="uploadImageBtn">Upload Image</label>
+            <div class="col-md-4">
+                <button id="uploadImageBtn" name="uploadImageBtn" class="btn btn-primary">Choose Image...</button>
+            </div>
+        </div>
+
+        <!-- Button (Double) -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="createObjectBtn">Create Object</label>
+            <div class="col-md-8">
+                <button id="createObjectBtn" name="createObjectBtn" class="btn btn-success">Create Object</button>
+                <button id="cancelObjectBtn" name="cancelObjectBtn" class="btn btn-danger" ng-click="openObjectList()">Cancel</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+
+
