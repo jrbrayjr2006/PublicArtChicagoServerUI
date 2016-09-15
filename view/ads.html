@@ -2,7 +2,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h1>All Ads</h1>
-        <button class="btn btn-primary">Create New Ad</button>
+        <button class="btn btn-primary btn-create">Create New Ad</button>
 
         <table class="table table-bordered table-stripped">
             <tr>
@@ -10,9 +10,9 @@
                 <th>Ad Image</th>
                 <th>Actions</th>
             </tr>
-            <tr>
-                <td></td>
-                <td></td>
+            <tr ng-repeat="ad in ads">
+                <td>{{ad.name}}</td>
+                <td><img src="{{ad.advertisementSrc}}" /></td>
                 <td>
                     <button class="btn btn-default" type="button">Edit</button>
                     <button class="btn btn-default" type="button">Delete</button>

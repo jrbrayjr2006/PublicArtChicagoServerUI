@@ -2,7 +2,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h1>All Narrators</h1>
-        <button class="btn btn-primary">Create New Narrator</button>
+        <button class="btn btn-primary btn-create">Create New Narrator</button>
 
         <table class="table table-bordered table-stripped">
             <tr>
@@ -10,9 +10,9 @@
                 <th>Narrator Avatar</th>
                 <th>Actions</th>
             </tr>
-            <tr>
-                <td></td>
-                <td></td>
+            <tr ng-repeat="narrator in narrators">
+                <td>{{narrator.name}}</td>
+                <td><img src="{{narrator.avatarSrc}}" /></td>
                 <td>
                     <button class="btn btn-default" type="button">Edit</button>
                     <button class="btn btn-default" type="button">Delete</button>

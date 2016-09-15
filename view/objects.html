@@ -2,11 +2,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h1>All Objects</h1>
-        <!--
-        <h1><a href="/PublicArtChicago/dashboard.html#/createObject" role="button" class="btn btn-primary">Create Object</a></h1>
-        -->
-        <button class="btn btn-primary" ng-click="openCreateObject()">Create New Object</button>
-
+        <button class="btn btn-primary btn-create" ng-click="openCreateObject()">Create New Object</button>
         <table class="table table-bordered table-stripped">
             <tr>
                 <th>Artist Name</th>
@@ -14,10 +10,10 @@
                 <th>Object Id</th>
                 <th>Actions</th>
             </tr>
-            <tr>
+            <tr ng-repeat="obj in objects">
                 <td></td>
-                <td></td>
-                <td></td>
+                <td>{{obj.name}}</td>
+                <td>{{obj.id}}</td>
                 <td>
                     <button class="btn btn-default" type="button">Edit</button>
                     <button class="btn btn-default" type="button">Delete</button>

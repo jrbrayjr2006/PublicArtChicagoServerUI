@@ -111,3 +111,15 @@ div#header form.header-form input {
 h1.loadheader {
     text-align: center;
 }
+
+.btn-create {
+    /*  */
+}
+
+.btn-create:hover, .btn-create:active {
+    /*  */
+}
+
+button.btn-create {
+    margin-bottom: 1em;
+}
