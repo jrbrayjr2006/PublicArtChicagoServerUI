@@ -3,16 +3,15 @@
     <div class="col-md-8">
         <h1>All Tours</h1>
         <button class="btn btn-primary">Create New Tour</button>
-
         <table class="table table-bordered table-stripped">
             <tr>
                 <th>Tour Name</th>
                 <th>Tour Description</th>
                 <th>Actions</th>
             </tr>
-            <tr>
-                <td></td>
-                <td></td>
+            <tr ng-repeat="tour in tours">
+                <td>{{tour.name}}</td>
+                <td>{{tour.description}}</td>
                 <td>
                     <button class="btn btn-default" type="button">Edit</button>
                     <button class="btn btn-default" type="button">Delete</button>
