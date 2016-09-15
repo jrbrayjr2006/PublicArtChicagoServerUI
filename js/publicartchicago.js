@@ -6,6 +6,11 @@ var app = angular.module('publicArt', ["ngRoute"]);
 var urlPrefix = "/PublicArtChicago";
 //var urlPrefix = "/PAC-dev";
 
+//Parse.initialize('sample-app-id');
+//Parse.serverURL = 'http://localhost:1337/parse';
+Parse.initialize('FmmE5Ecg2ZUMZmeY2hZV35Zz7sQkHNGHTwDoAiUt', 'fGO88S7C0xYlbJV6zWyCBFU5VswNhZghJRbFUvgM', 'lG6IyFWSPpQD0d21KbdsWKrMXjBG9aeKlUVk3UNe');
+Parse.serverURL = 'https://parseapi.back4app.com';
+
 var loginApp = angular.module('loginApp', ["ngRoute"]);
 
 app.config(function($routeProvider) {
@@ -23,6 +28,44 @@ app.config(function($routeProvider) {
     .when("/narrators", {templateUrl: urlPrefix + "/view/narrators.html"})
     .when("/createObject", {templateUrl: urlPrefix + "/view/createObject.html"})
     .otherwise({templateUrl: urlPrefix + "/view/welcome.html"});
+})
+.factory('Tours', function($q) {
+    var Tours = Parse.Object.extend("Tours", {
+        // instance methods
+    }, {
+        // class methods
+
+        getAllTours: function() {
+            console.debug("Tours.getAllTours()");
+            var defer = $q.defer();
+            var toursQuery = new Parse.Query(this);
+            toursQuery.find({
+                success: function(tour) {
+                    defer.resolve(tour);
+                    deferred.resolve({tour: tour.data});
+                    data = tour.data;
+                    console.debug("data:  " + data);
+                },
+                error: function(e) {
+                    defer.reject(e);
+                    console.error("Error while getting Tours from parse.  " + e.message);
+                }
+            });
+            console.info(defer.promise);
+            return defer.promise;
+        }
+    });
+
+    // Properties
+    Tours.prototype.__defineGetter__("name", function(){
+        return this.get("name");
+    });
+
+    Tours.prototype.__defineGetter__("description", function(){
+        return this.get("description");
+    });
+
+    return Tours;
 })
 .service('loginService', function($http, $q, $log) {
     console.debug("loginService...");
@@ -53,9 +96,10 @@ app.config(function($routeProvider) {
         console.debug("login()...");
     };
 })
-.controller('dashboardController', function($log, $scope, dashboardService) {
+.controller('dashboardController', function($log, $scope, dashboardService, Tours) {
     $scope.dashboardTitle = 'Public Art Chicago Dashboard';
     $scope.baseUrl = urlPrefix;
+    $scope.tours = [];
 
     $scope.search = function() {
         console.debug("search()...");
@@ -79,6 +123,28 @@ app.config(function($routeProvider) {
         console.debug("dashboardController.openCreateObject()...");
         location.href = urlPrefix + '/dashboard.html#/createObject';
     };
+
+    /**
+     * This is a function to test parse methods
+     */
+    $scope.testParse = function() {
+        console.debug("testParse()...");
+        var tourPromise = Tours.getAllTours();
+        tourPromise.then(function(promise) {
+            console.debug("promise: " + promise.data);
+            $scope.tours = promise.data;
+        });
+        $scope.tours = tourPromise;
+        console.debug($scope.tours);
+
+    };
+
+    Tours.getAllTours().then(function(tours) {
+        $scope.tours = tours;
+        console.debug($scope.tours);
+    }, function(error) {
+        console.error(error.message);
+    });
 })
 .controller('modalController', function($uibModal, $log, $scope){
     console.debug("modalController");
