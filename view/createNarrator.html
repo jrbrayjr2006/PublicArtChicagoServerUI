@@ -1,0 +1,34 @@
+<form class="form-horizontal">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Form Name</legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="narratorName">Narrator Name</label>
+            <div class="col-md-4">
+                <input id="narratorName" name="narratorName" placeholder="Enter the name of the narrator here" class="form-control input-md" required="" type="text">
+                <span class="help-block">This is a required field</span>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="narratorAvatarUploadBtn">Upload Narrator Avatar</label>
+            <div class="col-md-4">
+                <button id="narratorAvatarUploadBtn" name="narratorAvatarUploadBtn" class="btn btn-primary">Button</button>
+            </div>
+        </div>
+
+        <!-- Button (Double) -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="createNarratorBtn">Create Narrator</label>
+            <div class="col-md-8">
+                <button id="createNarratorBtn" name="createNarratorBtn" class="btn btn-success">Create Narrator</button>
+                <button id="cancelNarratorBtn" name="cancelNarratorBtn" class="btn btn-danger" ng-click="openNarratorList()">Cancel</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>

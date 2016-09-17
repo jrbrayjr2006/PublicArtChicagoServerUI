@@ -15,8 +15,11 @@
                 <td>{{obj.name}}</td>
                 <td>{{obj.id}}</td>
                 <td>
-                    <button class="btn btn-default" type="button">Edit</button>
-                    <button class="btn btn-default" type="button">Delete</button>
+                    <form>
+                        <button class="btn btn-default" type="button">Edit</button>
+                        <button class="btn btn-default" type="button">Delete</button>
+                        <input type="hidden" id="objId" value="{{obj.id}}">
+                    </form>
                 </td>
             </tr>
         </table>

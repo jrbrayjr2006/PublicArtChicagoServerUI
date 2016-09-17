@@ -27,6 +27,11 @@ app.config(function($routeProvider) {
         .when("/pois", {templateUrl: urlPrefix + "/view/pois.html"})
         .when("/narrators", {templateUrl: urlPrefix + "/view/narrators.html"})
         .when("/createObject", {templateUrl: urlPrefix + "/view/createObject.html"})
+        .when("/createArtist", {templateUrl: urlPrefix + "/view/createArtist.html"})
+        .when("/createTour", {templateUrl: urlPrefix + "/view/createTour.html"})
+        .when("/createPOI", {templateUrl: urlPrefix + "/view/createPOI.html"})
+        .when("/createAd", {templateUrl: urlPrefix + "/view/createAd.html"})
+        .when("/createNarrator", {templateUrl: urlPrefix + "/view/createNarrator.html"})
         .otherwise({templateUrl: urlPrefix + "/view/welcome.html"});
     })
     .factory('Objects', function($q) {
@@ -284,7 +289,7 @@ app.config(function($routeProvider) {
         };
 
         /**
-         * Is used by ng-click directive in button element to navigate to new view
+         * Is used by ng-click directive in button element to navigate to new view and perform any processing
          */
         $scope.openObjectList = function() {
             console.debug("dashboardController.openObjectList()...");
@@ -295,6 +300,61 @@ app.config(function($routeProvider) {
             console.debug("dashboardController.openCreateObject()...");
             location.href = urlPrefix + '/dashboard.html#/createObject';
         };
+
+        $scope.openArtistList = function() {
+            console.debug("dashboardController.openArtistList()...");
+            location.href = urlPrefix + '/dashboard.html#/artists';
+        };
+
+        $scope.openCreateArtist = function() {
+            console.debug("dashboardController.openCreateArtist()...");
+            location.href = urlPrefix + '/dashboard.html#/createArtist';
+        };
+
+        $scope.openTourList = function() {
+            console.debug("dashboardController.openTourList()...");
+            location.href = urlPrefix + '/dashboard.html#/tours';
+        };
+
+        $scope.openCreateTour = function() {
+            console.debug("dashboardController.openCreateTour()...");
+            location.href = urlPrefix + '/dashboard.html#/createTour';
+        };
+
+        $scope.openPOIList = function() {
+            console.debug("dashboardController.openPOIList()...");
+            location.href = urlPrefix + '/dashboard.html#/pois';
+        };
+
+        $scope.openCreatePOI = function() {
+            console.debug("dashboardController.openCreatePOI()...");
+            location.href = urlPrefix + '/dashboard.html#/createPOI';
+        };
+
+        $scope.openAdList = function() {
+            console.debug("dashboardController.openAdList()...");
+            location.href = urlPrefix + '/dashboard.html#/ads';
+        };
+
+        $scope.openCreateAd = function() {
+            console.debug("dashboardController.openCreateAd()...");
+            location.href = urlPrefix + '/dashboard.html#/createAd';
+        };
+
+        $scope.openNarratorList = function() {
+            console.debug("dashboardController.openNarratorList()...");
+            location.href = urlPrefix + '/dashboard.html#/narrators';
+        };
+
+        $scope.openCreateNarrator = function() {
+            console.debug("dashboardController.openCreateNarrator()...");
+            location.href = urlPrefix + '/dashboard.html#/createNarrator';
+        };
+
+        $scope.underConstruction = function() {
+            console.warn("This feature is under construction!");
+            alert("This feature is under construction");
+        }
 
         /**
          * This is a function to test parse methods

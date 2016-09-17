@@ -2,7 +2,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h1>All Artists</h1>
-        <button class="btn btn-primary btn-create">Create New Artist</button>
+        <button class="btn btn-primary btn-create" ng-click="openCreateArtist()">Create New Artist</button>
 
         <table class="table table-bordered">
             <tr>
@@ -14,8 +14,11 @@
                 <td>{{artist.name}}</td>
                 <td>{{artist.id}}</td>
                 <td>
-                    <button class="btn btn-default" type="button">Edit</button>
-                    <button class="btn btn-default" type="button">Delete</button>
+                    <form>
+                        <button class="btn btn-default" type="button">Edit</button>
+                        <button class="btn btn-default" type="button">Delete</button>
+                        <input type="hidden" id="objId" value="{{artist.id}}">
+                    </form>
                 </td>
             </tr>
         </table>

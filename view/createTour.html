@@ -1,0 +1,55 @@
+<form class="form-horizontal">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Create Tour</legend>
+
+        <!-- Multiple Checkboxes (inline) -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="demoTour">Is This Demo Tour?</label>
+            <div class="col-md-4">
+                <label class="checkbox-inline" for="demoTour">
+                    <input name="demoTour" id="demoTour" value="1" type="checkbox">
+                </label>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="tourName">Tour Name</label>
+            <div class="col-md-4">
+                <input id="tourName" name="tourName" placeholder="Enter the name of the tour here" class="form-control input-md" required="" type="text">
+                <span class="help-block">Provide a descriptive tour name</span>
+            </div>
+        </div>
+
+        <!-- Textarea -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="tourDescription">Description</label>
+            <div class="col-md-4">
+                <textarea class="form-control" id="tourDescription" name="tourDescription">Tour description...</textarea>
+            </div>
+        </div>
+
+        <!-- Select Multiple -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="tourObjectList">Tour Objects</label>
+            <div class="col-md-4">
+                <select id="tourObjectList" name="tourObjectList" class="form-control" multiple="multiple">
+                    <option value="1">Option one</option>
+                    <option value="2">Option two</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Button (Double) -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="createTourBtn">Create Tour</label>
+            <div class="col-md-8">
+                <button id="createTourBtn" name="createTourBtn" class="btn btn-success">Create Tour</button>
+                <button id="cancelTourBtn" name="cancelTourBtn" class="btn btn-danger" ng-click="openTourList()">Cancel</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
