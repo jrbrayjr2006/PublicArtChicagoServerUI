@@ -15,8 +15,8 @@
                 <td>{{artist.id}}</td>
                 <td>
                     <form>
-                        <button class="btn btn-default" type="button">Edit</button>
-                        <button class="btn btn-default" type="button">Delete</button>
+                        <button class="btn btn-default" type="button" ng-click="getArtist(artist.id)">Edit</button>
+                        <button class="btn btn-default" type="button" ng-click="deleteArtist(artist.id)">Delete</button>
                         <input type="hidden" id="objId" value="{{artist.id}}">
                     </form>
                 </td>

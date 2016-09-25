@@ -6,10 +6,10 @@ var app = angular.module('publicArt', ["ngRoute"]);
 var urlPrefix = "/PublicArtChicago";
 //var urlPrefix = "/PAC-dev";
 
-//Parse.initialize('sample-app-id');
-//Parse.serverURL = 'http://localhost:1337/parse';
-Parse.initialize('FmmE5Ecg2ZUMZmeY2hZV35Zz7sQkHNGHTwDoAiUt', 'fGO88S7C0xYlbJV6zWyCBFU5VswNhZghJRbFUvgM', 'lG6IyFWSPpQD0d21KbdsWKrMXjBG9aeKlUVk3UNe');
-Parse.serverURL = 'https://parseapi.back4app.com';
+Parse.initialize('sample-app-id');
+Parse.serverURL = 'http://localhost:1337/parse';
+//Parse.initialize('FmmE5Ecg2ZUMZmeY2hZV35Zz7sQkHNGHTwDoAiUt', 'fGO88S7C0xYlbJV6zWyCBFU5VswNhZghJRbFUvgM', 'lG6IyFWSPpQD0d21KbdsWKrMXjBG9aeKlUVk3UNe');
+//Parse.serverURL = 'https://parseapi.back4app.com';
 
 var loginApp = angular.module('loginApp', ["ngRoute"]);
 
@@ -103,7 +103,47 @@ app.config(function($routeProvider) {
                 console.debug("Artists.getSelectedArtist(objId)");
                 var defer = $q.defer();
                 var query = new Parse.Query(this);
-                //TODO
+                query.get(objId, {
+                    success: function(artist) {
+                        defer.resolve(artist);
+                        console.debug("Retrieved selected artist..." + artist.name);
+                    },
+                    error: function(object, error) {
+                        console.error("The artist retrieval failed!  " + error.message);
+                        $log("The artist retrieval failed!");
+                    }
+                });
+            },
+
+            saveNewArtist: function(artist) {
+                console.debug("Artists.saveNewArtist(artist)...");
+                var artists = new Artists();
+                artists.set("name", artist.name);
+                artists.set("info", artist.info);
+                artists.save(null, {
+                    success: function(artists) {
+                        console.info("New artist " + artists.name + " added to database.");
+                        alert("New artist " + artists.name + " added to database.");
+                    },
+                    error: function(artist, error) {
+                        console.error("Creation of new artist failed!  " + error.message);
+                    }
+                });
+                console.debug("artist saved: " + artist.name);
+            },
+
+            deleteArtist: function(objId) {
+                console.debug("Artists.deleteArtist(objId)...");
+                var artists = new Artists();
+                artists.set("id", objId);
+                artists.destroy({
+                    success: function(artists) {
+                        console.info("Artist deleted from database.");
+                    },
+                    error: function(artists, error) {
+                        console.error("Deletion of artist failed!  " + error.message);
+                    }
+                });
             }
         });
 
@@ -255,6 +295,17 @@ app.config(function($routeProvider) {
     .service('parseService', function($http, $q, $log){
         console.debug("ENTER:: parseService...");
     })
+    .service('artistService', function($http, $q, $log, Artists) {
+        console.debug("::ENTER:: artistService...");
+
+        this.createNewArtist = function(artist) {
+            //TODO create new Artist
+        };
+
+        this.deleteArtist = function(objId) {
+            //TODO delete specified artist
+        };
+    })
     .controller('titleController', function($log, $scope) {
         $scope.loginTitle = "Public Art Chicago Login";
         $scope.dashboardTitle = "Public Art Chicago Dashboard";
@@ -369,6 +420,40 @@ app.config(function($routeProvider) {
             $scope.tours = tourPromise;
             console.debug($scope.tours);
 
+        };
+
+        //-- Artists functions --
+
+        $scope.saveNewArtist = function(artist) {
+            console.debug("::ENTER:: dashboardController.saveNewArtist(artist)...");
+            console.debug("adding artist:  " + artist.name);
+            Artists.saveNewArtist(artist);
+            Artists.getAllArtists().then(function(artists) {
+                $scope.artists = artists;
+                $scope.openArtistList();
+            }, function(error) {
+                console.error(error.message);
+            });
+            console.debug("::EXIT:: dashboardController.saveNewArtist(artist)...")
+        };
+
+        $scope.getArtist = function(objId) {
+            console.debug("::ENTER:: dashboardController.getSelectedArtist(objId)...");
+            Artists.getSelectedArtist(objId);
+            //TODO
+            console.debug("::EXIT:: dashboardController.getSelectedArtist(objId)...");
+        };
+
+        $scope.deleteArtist = function(objId) {
+            console.debug("::ENTER:: dashboardController.deleteArtist(objId)...");
+            console.debug("Deletion target: " + objId);
+            Artists.deleteArtist(objId);
+            Artists.getAllArtists().then(function(artists) {
+                $scope.artists = artists;
+            }, function(error) {
+                console.error(error.message);
+            });
+            console.debug("::EXIT:: dashboardController.deleteArtist(objId)...");
         };
 
         Objects.getAllObjects().then(function(objects) {
