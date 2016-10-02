@@ -1,15 +1,28 @@
 /**
  * Created by jamesbray on 9/12/16.
  */
+var fileInput = '';
+$(function() {
+
+    // We can attach the `fileselect` event to all file inputs on the page
+    $(document).on('change', ':file', function () {
+        var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        console.debug(label);
+        fileInput = label;
+        input.trigger('fileselect', [numFiles, label]);
+    });
+});
 
 var app = angular.module('publicArt', ["ngRoute"]);
 var urlPrefix = "/PublicArtChicago";
 //var urlPrefix = "/PAC-dev";
 
-Parse.initialize('sample-app-id');
-Parse.serverURL = 'http://localhost:1337/parse';
-//Parse.initialize('FmmE5Ecg2ZUMZmeY2hZV35Zz7sQkHNGHTwDoAiUt', 'fGO88S7C0xYlbJV6zWyCBFU5VswNhZghJRbFUvgM', 'lG6IyFWSPpQD0d21KbdsWKrMXjBG9aeKlUVk3UNe');
-//Parse.serverURL = 'https://parseapi.back4app.com';
+//Parse.initialize('sample-app-id');
+//Parse.serverURL = 'http://localhost:1337/parse';
+Parse.initialize('FmmE5Ecg2ZUMZmeY2hZV35Zz7sQkHNGHTwDoAiUt', 'fGO88S7C0xYlbJV6zWyCBFU5VswNhZghJRbFUvgM', 'lG6IyFWSPpQD0d21KbdsWKrMXjBG9aeKlUVk3UNe');
+Parse.serverURL = 'https://parseapi.back4app.com';
 
 var loginApp = angular.module('loginApp', ["ngRoute"]);
 
@@ -62,6 +75,10 @@ app.config(function($routeProvider) {
                 var defer = $q.defer();
                 var query = new Parse.Query(this);
                 //TODO
+            },
+
+            saveNewObject: function(object) {
+                console.debug("Objects.saveNewObject(object)...");
             }
         });
 
@@ -229,6 +246,47 @@ app.config(function($routeProvider) {
                 var defer = $q.defer();
                 var query = new Parse.Query(this);
                 //TODO
+                return defer.promise;
+            },
+
+            saveNewNarrator: function(narrator) {
+                console.debug("Narrators.saveNewNarrator(narrator)");
+                var defer = $q.defer();
+                var narrators = new Narrators();
+                narrators.name = narrator.name;
+                narrators.avatarSrc = narrator.avatarSrc;
+                narrators.save(null, {
+                    success: function(narrators) {
+                        console.info("New narrator saved...");
+                    },
+                    error: function(narrators, e) {
+                        console.error("Creation of new narrator failed!  " + e.message);
+                    }
+                });
+                //return defer.promise;
+                console.info("Narrator save attempt complete");
+            },
+
+            updateNarrator: function(objId) {
+                console.debug("Narrators.updateNarrator(narrator)");
+                var defer = $q.defer();
+                //TODO
+                return defer.promise;
+            },
+
+            deleteNarrator: function(objId) {
+                console.debug("Narrators.deleteNarrator(objId)");
+                var narrators = new Narrators();
+                narrators.set("id", objId);
+                narrators.destroy({
+                    success: function() {
+                        console.debug("Narrator deleted");
+                        $log(objId + " :Narrator deleted");
+                    },
+                    error: function(e) {
+                        console.error("Narrator deletion failed");
+                    }
+                });
             }
         });
 
@@ -280,6 +338,42 @@ app.config(function($routeProvider) {
 
         return Tours;
     })
+    .factory('Sponsor', function($q) {
+        var Sponsor = Parse.Object.extend("Sponsor", {
+            // instance methods
+        }, {
+            // class methods
+
+            getAllSponsors: function() {
+                console.debug("Sponsor.getAllSponsors()");
+                var defer = $q.defer();
+                var sponsorQuery = new Parse.Query(this);
+                sponsorQuery.find({
+                    success: function(sponsor) {
+                        defer.resolve(sponsor);
+                        console.debug("success retrieving sponsor data");
+                    },
+                    error: function(e) {
+                        defer.reject(e);
+                        console.error("Error while getting Sponsor from parse.  " + e.message);
+                    }
+                });
+                console.info(defer.promise);
+                return defer.promise;
+            }
+        });
+
+        // Properties
+        Sponsor.prototype.__defineGetter__("name", function(){
+            return this.get("name");
+        });
+
+        Sponsor.prototype.__defineGetter__("description", function(){
+            return this.get("description");
+        });
+
+        return Sponsor;
+    })
     .service('loginService', function($http, $q, $log) {
         console.debug("loginService...");
 
@@ -320,14 +414,17 @@ app.config(function($routeProvider) {
             console.debug("login()...");
         };
     })
-    .controller('dashboardController', function($log, $scope, dashboardService, Tours, Objects, Artists, Ads, Narrators) {
+    .controller('dashboardController', function($log, $scope, dashboardService, Tours, Objects, Artists, Ads, Narrators, Sponsor) {
         $scope.dashboardTitle = 'Public Art Chicago Dashboard';
+        $scope.objectsBaseImageUrl = 'https://s3.amazonaws.com/public-art-chicago/objects';
         $scope.baseUrl = urlPrefix;
         $scope.objects = [];
         $scope.artists = [];
         $scope.ads = [];
         $scope.tours = [];
         $scope.narrators = [];
+        $scope.sponsors = [];
+        $scope.filename = '';
 
         $scope.search = function() {
             console.debug("search()...");
@@ -407,22 +504,13 @@ app.config(function($routeProvider) {
             alert("This feature is under construction");
         }
 
-        /**
-         * This is a function to test parse methods
-         */
-        $scope.testParse = function() {
-            console.debug("testParse()...");
-            var tourPromise = Tours.getAllTours();
-            tourPromise.then(function(promise) {
-                console.debug("promise: " + promise.data);
-                $scope.tours = promise.data;
-            });
-            $scope.tours = tourPromise;
-            console.debug($scope.tours);
-
-        };
-
         //-- Artists functions --
+
+        Artists.getAllArtists().then(function(artists) {
+            $scope.artists = artists;
+        }, function(error) {
+            console.error(error.message);
+        });
 
         $scope.saveNewArtist = function(artist) {
             console.debug("::ENTER:: dashboardController.saveNewArtist(artist)...");
@@ -456,6 +544,8 @@ app.config(function($routeProvider) {
             console.debug("::EXIT:: dashboardController.deleteArtist(objId)...");
         };
 
+        //-- Objects functions --
+
         Objects.getAllObjects().then(function(objects) {
             $scope.objects = objects;
             //console.debug($scope.objects);
@@ -463,11 +553,21 @@ app.config(function($routeProvider) {
             console.error(error.message);
         });
 
-        Artists.getAllArtists().then(function(artists) {
-            $scope.artists = artists;
-        }, function(error) {
-            console.error(error.message);
-        });
+        $scope.saveNewObject = function(object) {
+            console.debug("::ENTER:: dashboardController.saveNewObject(object)...");
+            console.debug("adding artist:  " + object.name);
+            console.debug(object);
+            Objects.saveNewObject(object);
+            Objects.getAllObjects().then(function(object) {
+                $scope.objects = object;
+                $scope.openObjectList()
+            }, function(error) {
+                console.error(error.message);
+            });
+            console.debug("::EXIT:: dashboardController.saveNewObject(object)...")
+        };
+
+        //-- Ads functions --
 
         Ads.getAllAds().then(function(ads) {
             $scope.ads = ads;
@@ -488,4 +588,30 @@ app.config(function($routeProvider) {
             console.error(error.message);
             $log.error(error.message);
         });
+
+        Sponsor.getAllSponsors().then(function(sponsor) {
+            $scope.sponsors = sponsor;
+        }, function(error) {
+            console.error(error.message);
+            $log.error(error.message);
+        });
+
+        /**
+         * This is a function to test parse methods
+         */
+        $scope.testParse = function() {
+            console.debug("testParse()...");
+            var tourPromise = Tours.getAllTours();
+            tourPromise.then(function(promise) {
+                console.debug("promise: " + promise.data);
+                $scope.tours = promise.data;
+            });
+            $scope.tours = tourPromise;
+            console.debug($scope.tours);
+
+        };
+
+        $scope.testUpload = function() {
+            console.info("Selected upload...");
+        };
     });
