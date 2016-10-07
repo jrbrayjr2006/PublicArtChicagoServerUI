@@ -9,7 +9,7 @@
             <label class="col-md-4 control-label" for="demoTour">Is This Demo Tour?</label>
             <div class="col-md-4">
                 <label class="checkbox-inline" for="demoTour">
-                    <input name="demoTour" id="demoTour" value="1" type="checkbox">
+                    <input name="demoTour" id="demoTour" ng-model="tour.isDemoTour" value="1" type="checkbox">
                 </label>
             </div>
         </div>
@@ -18,7 +18,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="tourName">Tour Name</label>
             <div class="col-md-4">
-                <input id="tourName" name="tourName" placeholder="Enter the name of the tour here" class="form-control input-md" required="" type="text">
+                <input id="tourName" name="tourName" ng-model="tour.name" placeholder="Enter the name of the tour here" class="form-control input-md" required="" type="text">
                 <span class="help-block">Provide a descriptive tour name</span>
             </div>
         </div>
@@ -27,7 +27,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="tourDescription">Description</label>
             <div class="col-md-4">
-                <textarea class="form-control" id="tourDescription" name="tourDescription">Tour description...</textarea>
+                <textarea class="form-control" id="tourDescription" ng-model="tour.description" name="tourDescription">Tour description...</textarea>
             </div>
         </div>
 
@@ -35,9 +35,9 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="tourObjectList">Tour Objects</label>
             <div class="col-md-4">
-                <select id="tourObjectList" name="tourObjectList" class="form-control" multiple="multiple">
-                    <option value="1">Option one</option>
-                    <option value="2">Option two</option>
+                <select id="tourObjectList" name="tourObjectList" ng-model="tour.objects" class="form-control" multiple="multiple">
+                    <option value="0">Select Objects</option>
+                    <option ng-repeat="object in objects" value="{{object.id}}">{{object.name}}</option>
                 </select>
             </div>
         </div>
@@ -46,7 +46,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="createTourBtn">Create Tour</label>
             <div class="col-md-8">
-                <button id="createTourBtn" name="createTourBtn" class="btn btn-success">Create Tour</button>
+                <button id="createTourBtn" name="createTourBtn" class="btn btn-success" ng-click="saveNewTour(tour)">Create Tour</button>
                 <button id="cancelTourBtn" name="cancelTourBtn" class="btn btn-danger" ng-click="openTourList()">Cancel</button>
             </div>
         </div>

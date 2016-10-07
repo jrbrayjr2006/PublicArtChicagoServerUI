@@ -324,6 +324,40 @@ app.config(function($routeProvider) {
                 });
                 console.info(defer.promise);
                 return defer.promise;
+            },
+
+            saveNewTour: function(tour) {
+                console.debug("Tours.saveNewTour(Tours)...");
+                var defer = $q.defer();
+                var tours = new Tours();
+                tours.set("name", tour.name);
+                tours.set("description", tour.description);
+                tours.set("objects", tour.objects);
+                tours.set("isDemoTour", tour.isDemoTour);
+                tours.save(null, {
+                    success: function(tours){
+                        console.info(tours.name + " added to the database...");
+                    },
+                    error: function(tours, e){
+                        console.error("Creation of new tour failed!  " + e.message);
+                    }
+                });
+            },
+
+            deleteTour: function(objId) {
+                console.debug("Tours.deleteTour(objId)...");
+                var defer = $q.defer();
+                var tours = new Tours();
+                tours.set("id", objId);
+                tours.destroy({
+                    success: function() {
+                        console.info("Tour deleted with id " + objId);
+                        $log("Tour deleted with id " + objId);
+                    },
+                    error: function(e) {
+                        console.error("An error occurred while attempting to delete the tour...");
+                    }
+                });
             }
         });
 
@@ -575,12 +609,41 @@ app.config(function($routeProvider) {
             console.error(error.message);
         });
 
+        //-- Tours functions --
+
         Tours.getAllTours().then(function(tours) {
             $scope.tours = tours;
             console.debug($scope.tours);
         }, function(error) {
             console.error(error.message);
         });
+
+        $scope.saveNewTour = function(tour) {
+            console.debug("::ENTER:: dashboardController.saveNewTour(tour)...");
+            Tours.saveNewTour(tour);
+            //TODO
+            alert("New tour created");
+            console.debug("::EXIT:: dashboardController.saveNewTour(tour)...");
+        };
+
+        $scope.deleteTour = function(objId) {
+            console.debug("::ENTER:: dashboardController.deleteTour(tour)...");
+            Tours.deleteTour(objId);
+            Tours.getAllTours().then(function(tours) {
+                $scope.tours = tours;
+                console.debug($scope.tours);
+            }, function(error) {
+                console.error(error.message);
+            });
+            console.debug("::EXIT:: dashboardController.deleteTour(tour)...");
+        };
+
+        $scope.getTour = function(objId) {
+            console.debug("::ENTER:: dashboardController.getTour(tour)...");
+            Tours.getTour(objId);
+            //TODO
+            console.debug("::EXIT:: dashboardController.getTour(tour)...");
+        };
 
         //-- Narrators functions --
 

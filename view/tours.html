@@ -13,8 +13,8 @@
                 <td>{{tour.name}}</td>
                 <td>{{tour.description}}</td>
                 <td>
-                    <button class="btn btn-default" type="button">Edit</button>
-                    <button class="btn btn-default" type="button">Delete</button>
+                    <button class="btn btn-default" type="button" ng-click="getTour(tour.id)">Edit</button>
+                    <button class="btn btn-default" type="button" ng-click="deleteTour(tour.id)">Delete</button>
                 </td>
             </tr>
         </table>
