@@ -14,8 +14,8 @@
                 <td>{{narrator.name}}</td>
                 <td><img src="{{narrator.avatarSrc}}" /></td>
                 <td>
-                    <button class="btn btn-default" type="button">Edit</button>
-                    <button class="btn btn-default" type="button">Delete</button>
+                    <button class="btn btn-default" type="button" ng-click="getNarrator(narrator.id)">Edit</button>
+                    <button class="btn btn-default" type="button" ng-click="deleteNarrator(narrator.id)">Delete</button>
                 </td>
             </tr>
         </table>

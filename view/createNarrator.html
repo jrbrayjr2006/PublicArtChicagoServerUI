@@ -8,7 +8,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="narratorName">Narrator Name</label>
             <div class="col-md-4">
-                <input id="narratorName" name="narratorName" placeholder="Enter the name of the narrator here" class="form-control input-md" required="" type="text">
+                <input id="narratorName" name="narratorName" ng-model="narrator.name" placeholder="Enter the name of the narrator here" class="form-control input-md" required="" type="text">
                 <span class="help-block">This is a required field</span>
             </div>
         </div>
@@ -18,7 +18,7 @@
             <label class="col-md-4 control-label" for="narratorAvatarUploadBtn">Upload Narrator Avatar</label>
             <div class="col-md-4">
                 <label class="input-group-btn" ng-click="testUpload()">
-                    <span class="btn btn-primary btn-file">Browse&hellip;</span> <input id="narratorAvatarUploadBtn" name="narratorAvatarUploadBtn" type="file" style="display: none;" />
+                    <span class="btn btn-primary btn-file">Browse&hellip;</span> <input id="narratorAvatarUploadBtn" name="narratorAvatarUploadBtn" ng-model="narrator.avatarSrc" type="file" style="display: none;" />
                 </label>
                 <span>{{filename}}</span>
             </div>
@@ -28,7 +28,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="createNarratorBtn">Create Narrator</label>
             <div class="col-md-8">
-                <button id="createNarratorBtn" name="createNarratorBtn" class="btn btn-success">Create Narrator</button>
+                <button id="createNarratorBtn" name="createNarratorBtn" class="btn btn-success" ng-click="saveNewNarrator(narrator)">Create Narrator</button>
                 <button id="cancelNarratorBtn" name="cancelNarratorBtn" class="btn btn-danger" ng-click="openNarratorList()">Cancel</button>
             </div>
         </div>

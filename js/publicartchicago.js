@@ -253,11 +253,11 @@ app.config(function($routeProvider) {
                 console.debug("Narrators.saveNewNarrator(narrator)");
                 var defer = $q.defer();
                 var narrators = new Narrators();
-                narrators.name = narrator.name;
-                narrators.avatarSrc = narrator.avatarSrc;
+                narrators.set("name", narrator.name);
+                narrators.set("avatarSrc", narrator.avatarSrc);
                 narrators.save(null, {
                     success: function(narrators) {
-                        console.info("New narrator saved...");
+                        console.info(narrators.name + " added to database...");
                     },
                     error: function(narrators, e) {
                         console.error("Creation of new narrator failed!  " + e.message);
@@ -582,12 +582,45 @@ app.config(function($routeProvider) {
             console.error(error.message);
         });
 
+        //-- Narrators functions --
+
         Narrators.getAllNarrators().then(function(narrators) {
             $scope.narrators = narrators;
         }, function(error) {
             console.error(error.message);
             $log.error(error.message);
         });
+
+        $scope.saveNewNarrator = function(narrator) {
+            console.debug("::ENTER:: dashboardController.saveNewNarrator(narrator)...");
+            console.debug("The name of the new narrator is " + narrator.name + " and path is " + narrator.avatarSrc);
+            Narrators.saveNewNarrator(narrator);
+            Narrators.getAllNarrators().then(function(narrators) {
+                $scope.narrators = narrators;
+            }, function(error) {
+                console.error(error.message);
+                $log.error(error.message);
+            });
+            console.debug("::EXIT:: dashboardController.saveNewNarrator(narrator)...");
+        }
+
+        $scope.deleteNarrator = function(objId) {
+            console.debug("::ENTER:: dashboardController.deleteNarrator(objId)...");
+            Narrators.deleteNarrator(objId);
+            Narrators.getAllNarrators().then(function(narrators) {
+                $scope.narrators = narrators;
+            }, function(error) {
+                console.error(error.message);
+                $log.error(error.message);
+            });
+            console.debug("::EXIT:: dashboardController.deleteNarrator(objId)...");
+        }
+
+        $scope.getNarrator = function(objId) {
+            console.debug("::ENTER:: dashboardController.getNarrator(objId)...");
+            //
+            console.debug("::EXIT:: dashboardController.getNarrator(objId)...");
+        }
 
         Sponsor.getAllSponsors().then(function(sponsor) {
             $scope.sponsors = sponsor;
