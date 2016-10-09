@@ -10,9 +10,9 @@
                 <th>Coordinates</th>
                 <th>Actions</th>
             </tr>
-            <tr>
-                <td></td>
-                <td></td>
+            <tr ng-repeat="poi in pois">
+                <td>{{poi.name}}</td>
+                <td>{{poi.location.latitude}}, {{poi.location.longitude}}</td>
                 <td>
                     <button class="btn btn-default" type="button">Edit</button>
                     <button class="btn btn-default" type="button">Delete</button>

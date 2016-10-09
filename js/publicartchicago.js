@@ -372,6 +372,45 @@ app.config(function($routeProvider) {
 
         return Tours;
     })
+    .factory('POIS', function($q) {
+        // Points of interests are objects that are classified as 'cultural'
+        var POIS = Parse.Object.extend("Objects", {
+            // instance methods
+        }, {
+            // class methods
+
+            getAllPointsOfInterest: function() {
+                console.debug("::ENTER:: POIS.getAllPointsOfInterest()...");
+                var defer = $q.defer();
+                var poisQuery = new Parse.Query(this);
+                //cultural objects are points of interest
+                poisQuery.equalTo("type", "cultural");
+                poisQuery.find({
+                    success: function(pois) {
+                        defer.resolve(pois);
+                        console.debug("success retrieving objects data");
+                    },
+                    error: function(error) {
+                        defer.reject(error);
+                        console.error("An error occurred while retrieving Objects data.  " + error.message);
+                    }
+                });
+
+                console.info(defer.promise);
+                return defer.promise;
+            }
+        });
+
+        POIS.prototype.__defineGetter__("name", function() {
+            return this.get("name");
+        });
+
+        POIS.prototype.__defineGetter__("location", function() {
+            return this.get("location");
+        });
+
+        return POIS;
+    })
     .factory('Sponsor', function($q) {
         var Sponsor = Parse.Object.extend("Sponsor", {
             // instance methods
@@ -448,7 +487,7 @@ app.config(function($routeProvider) {
             console.debug("login()...");
         };
     })
-    .controller('dashboardController', function($log, $scope, dashboardService, Tours, Objects, Artists, Ads, Narrators, Sponsor) {
+    .controller('dashboardController', function($log, $scope, dashboardService, Tours, Objects, Artists, Ads, Narrators, POIS, Sponsor) {
         $scope.dashboardTitle = 'Public Art Chicago Dashboard';
         $scope.objectsBaseImageUrl = 'https://s3.amazonaws.com/public-art-chicago/objects';
         $scope.baseUrl = urlPrefix;
@@ -457,6 +496,7 @@ app.config(function($routeProvider) {
         $scope.ads = [];
         $scope.tours = [];
         $scope.narrators = [];
+        $scope.pois = [];
         $scope.sponsors = [];
         $scope.filename = '';
 
@@ -690,6 +730,15 @@ app.config(function($routeProvider) {
         }, function(error) {
             console.error(error.message);
             $log.error(error.message);
+        });
+
+        //-- Points of Interest (POIS) --
+
+        POIS.getAllPointsOfInterest().then(function(poi) {
+            console.debug("::ENTER:: dashboardController.POIS.getAllPointsOfInterest()...");
+            $scope.pois = poi;
+        }, function(error) {
+            console.error(error.message);
         });
 
         /**
