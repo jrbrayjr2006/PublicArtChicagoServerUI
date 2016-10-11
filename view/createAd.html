@@ -8,7 +8,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="adName">Ad Name</label>
             <div class="col-md-4">
-                <input id="adName" name="adName" placeholder="Enter name of ad here" class="form-control input-md" required="" type="text">
+                <input id="adName" name="adName" ng-model="ad.name" placeholder="Enter name of ad here" class="form-control input-md" required="" type="text">
                 <span class="help-block">Enter a descriptive name for the ad</span>
             </div>
         </div>
@@ -18,7 +18,7 @@
             <label class="col-md-4 control-label" for="demoAd">Is Demo Ad?</label>
             <div class="col-md-4">
                 <label class="checkbox-inline" for="demoAd">
-                    <input name="demoAd" id="demoAd" value="1" type="checkbox">
+                    <input name="demoAd" id="demoAd" ng-model="ad.isDemoAd" value="1" type="checkbox">
                 </label>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <label class="col-md-4 control-label" for="globalAd">Is Global Ad?</label>
             <div class="col-md-4">
                 <label class="checkbox-inline" for="globalAd">
-                    <input name="globalAd" id="globalAd" value="1" type="checkbox">
+                    <input name="globalAd" id="globalAd" ng-model="ad.isGlobalSponsor" value="1" type="checkbox">
                 </label>
             </div>
         </div>
@@ -89,7 +89,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="createAdBtn">Create Object</label>
             <div class="col-md-8">
-                <button id="createAdBtn" name="createAdBtn" class="btn btn-success">Create Ad</button>
+                <button id="createAdBtn" name="createAdBtn" class="btn btn-success" ng-click="saveNewAd(ad)">Create Ad</button>
                 <button id="cancelAdBtn" name="cancelAdBtn" class="btn btn-danger" ng-click="openAdList()">Cancel</button>
             </div>
         </div>

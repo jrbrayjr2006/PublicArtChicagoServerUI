@@ -182,6 +182,10 @@ app.config(function($routeProvider) {
         }, {
             // Class methods
 
+            /**
+             *
+             * @returns {*}
+             */
             getAllAds: function() {
                 console.debug("Ads.getAllAds()");
                 var defer = $q.defer();
@@ -200,10 +204,52 @@ app.config(function($routeProvider) {
             },
 
             getSelectedAd: function(objId) {
-                console.debug("Ads.getSelectedAd(objId)");
+                console.debug("::ENTER:: Ads.getSelectedAd(objId)");
                 var defer = $q.defer();
+                var ads = new Ads();
+                ads.set("id", objId);
                 var query = new Parse.Query(this);
                 //TODO
+            },
+
+            /**
+             *
+             * @param ad
+             */
+            saveNewAd: function(ad) {
+                console.debug("::ENTER:: Ads.saveNewAd(ad)");
+                var ads = new Ads();
+                ads.set("name", ad.name);
+                ads.set("isDemoAd", ad.isDemoAd);
+                ads.set("advertisementSrc", ad.advertisementSrc);
+                ads.save(null, {
+                    success: function(ad) {
+                        console.info("New ad for " + ads.name + " saved to database");
+                    },
+                    error: function(e) {
+                        console.error(e.message);
+                    }
+                });
+                console.debug("::EXIT:: Ads.saveNewAd(ad)");
+            },
+
+            /**
+             *
+             * @param objId
+             */
+            deleteAd: function(objId) {
+                console.debug("::ENTER:: Ads.deleteAd(objId)");
+                var ads = new Ads();
+                ads.set("id", objId);
+                ads.destroy({
+                    success: function(ads) {
+                        console.info(ads.name + " ad deleted");
+                    },
+                    error: function(e) {
+                        console.error(e.message);
+                    }
+                });
+                console.debug("::EXIT:: Ads.deleteAd(objId)");
             }
         });
 
@@ -648,6 +694,20 @@ app.config(function($routeProvider) {
         }, function(error) {
             console.error(error.message);
         });
+
+        $scope.saveNewAd = function(ad) {
+            console.debug("::ENTER:: dashboardController.saveNewAd(ad)...");
+            Ads.saveNewAd(ad);
+            alert("New ad saved to database");
+            console.debug("::EXIT:: dashboardController.saveNewAd(ad)...");
+        };
+
+        $scope.deleteAd = function(objId) {
+            console.debug("::ENTER:: dashboardController.deleteAd(objId)...");
+            Ads.deleteAd(objId);
+            alert("Ad deleted");
+            console.debug("::EXIT:: dashboardController.deleteAd(objId)...");
+        };
 
         //-- Tours functions --
 
