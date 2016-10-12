@@ -47,6 +47,24 @@ app.config(function($routeProvider) {
         .when("/createNarrator", {templateUrl: urlPrefix + "/view/createNarrator.html"})
         .otherwise({templateUrl: urlPrefix + "/view/welcome.html"});
     })
+    .directive("fileread", [function () {
+        return {
+            scope: {
+                fileread: "="
+            },
+            link: function (scope, element, attributes) {
+                element.bind("change", function (changeEvent) {
+                    var reader = new FileReader();
+                    reader.onload = function (loadEvent) {
+                        scope.$apply(function () {
+                            scope.fileread = loadEvent.target.result;
+                        });
+                    }
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+            }
+        }
+    }])
     .factory('Objects', function($q) {
         var Objects = Parse.Object.extend("Objects", {
             // Instance methods
@@ -79,6 +97,46 @@ app.config(function($routeProvider) {
 
             saveNewObject: function(object) {
                 console.debug("Objects.saveNewObject(object)...");
+                var objects = new Objects();
+                objects.set("name", object.name);
+                objects.set("address", object.address);
+                objects.set("city", object.city);
+                objects.set("state", object.state);
+                objects.set("zipcode", object.zipcode);
+                objects.set("url", object.url);
+                objects.set("location", object.location);
+                objects.set("type", object.type);
+                objects.save(null, {
+                    success: function(objects) {
+                        if(objects.type == "cultural") {
+                            console.debug("Successfully created new POI...");
+                        } else {
+                            console.debug("Successfully created new Object...");
+                        }
+                    },
+                    error: function(e) {
+                        if(object.type == "cultural") {
+                            console.error("Error occurred while creating POI! " + e.message);
+                        } else {
+                            console.error("Error occurred while creating Object! " + e.message);
+                        }
+                    }
+                });
+            },
+
+
+            deleteObject: function(objId) {
+                console.debug("Objects.deleteObject(objId)...");
+                var objects = new Objects();
+                objects.set("id", objId);
+                objects.destroy({
+                    success: function() {
+                        console.debug("Object deleted from the database");
+                    },
+                    error: function(e) {
+                        console.error(e.message);
+                    }
+                });
             }
         });
 
@@ -170,11 +228,6 @@ app.config(function($routeProvider) {
         });
 
         return Artists;
-    })
-    .factory('pois', function($q) {
-        var pois = null;
-
-        return pois;
     })
     .factory('Ads', function($q) {
         var Ads = Parse.Object.extend("Ads", {
@@ -675,7 +728,7 @@ app.config(function($routeProvider) {
 
         $scope.saveNewObject = function(object) {
             console.debug("::ENTER:: dashboardController.saveNewObject(object)...");
-            console.debug("adding artist:  " + object.name);
+            console.debug("adding object:  " + object.name);
             console.debug(object);
             Objects.saveNewObject(object);
             Objects.getAllObjects().then(function(object) {
@@ -757,6 +810,7 @@ app.config(function($routeProvider) {
         $scope.saveNewNarrator = function(narrator) {
             console.debug("::ENTER:: dashboardController.saveNewNarrator(narrator)...");
             console.debug("The name of the new narrator is " + narrator.name + " and path is " + narrator.avatarSrc);
+            narrator.avatarSrc = $scope.objectsBaseImageUrl + "/default.png";
             Narrators.saveNewNarrator(narrator);
             Narrators.getAllNarrators().then(function(narrators) {
                 $scope.narrators = narrators;
@@ -800,6 +854,33 @@ app.config(function($routeProvider) {
         }, function(error) {
             console.error(error.message);
         });
+
+        /**
+         * <p>
+         *     A POI is a special type of Object, so an Object will be created
+         * </p>
+         * @param poi
+         */
+        $scope.addNewPOI = function(poi) {
+            console.debug("::ENTER:: dashboardController.addNewPOI(poi)...");
+            poi.location = new Parse.GeoPoint(poi.latitude, poi.longitude);
+            console.debug(poi.location);
+            poi.type = "cultural";
+            Objects.saveNewObject(poi);
+            alert("Created a new Point of Interest.");
+            console.debug("::EXIT:: dashboardController.addNewPOI(poi)...");
+        };
+
+        $scope.deletePOI = function(objId) {
+            console.debug("::ENTER:: dashboardController.deletePOI(objId)...");
+            Objects.deleteObject(objId);
+            POIS.getAllPointsOfInterest().then(function(poi) {
+                $scope.pois = poi;
+            }, function(error) {
+                console.error(error.message);
+            });
+            alert("The Point of Interest has been deleted!");
+        };
 
         /**
          * This is a function to test parse methods

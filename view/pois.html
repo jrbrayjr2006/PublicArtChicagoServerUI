@@ -15,7 +15,7 @@
                 <td>{{poi.location.latitude}}, {{poi.location.longitude}}</td>
                 <td>
                     <button class="btn btn-default" type="button">Edit</button>
-                    <button class="btn btn-default" type="button">Delete</button>
+                    <button class="btn btn-default" type="button" ng-click="deletePOI(poi.id)">Delete</button>
                 </td>
             </tr>
         </table>

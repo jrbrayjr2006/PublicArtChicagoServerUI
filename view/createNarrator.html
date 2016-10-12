@@ -17,10 +17,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="narratorAvatarUploadBtn">Upload Narrator Avatar</label>
             <div class="col-md-4">
-                <label class="input-group-btn" ng-click="testUpload()">
-                    <span class="btn btn-primary btn-file">Browse&hellip;</span> <input id="narratorAvatarUploadBtn" name="narratorAvatarUploadBtn" ng-model="narrator.avatarSrc" type="file" style="display: none;" />
-                </label>
-                <span>{{filename}}</span>
+                <input id="narratorAvatarUploadBtn" name="narratorAvatarUploadBtn" fileread="narrator.avatarSrc" type="file" />
             </div>
         </div>
 

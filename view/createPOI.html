@@ -8,7 +8,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="poiName">POI Name</label>
             <div class="col-md-4">
-                <input id="poiName" name="poiName" placeholder="Enter point of interest name here" class="form-control input-md" required="" type="text">
+                <input id="poiName" name="poiName" ng-model="object.name" placeholder="Enter point of interest name here" class="form-control input-md" required="" type="text">
                 <span class="help-block">Provide a descriptive name for the point of interest</span>
             </div>
         </div>
@@ -17,7 +17,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="poiCity">City</label>
             <div class="col-md-4">
-                <input id="poiCity" name="poiCity" placeholder="Enter the city of the point of interest" class="form-control input-md" type="text">
+                <input id="poiCity" name="poiCity" ng-model="object.city" placeholder="Enter the city of the point of interest" class="form-control input-md" type="text">
                 <span class="help-block">City name</span>
             </div>
         </div>
@@ -26,7 +26,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="addres">Address</label>
             <div class="col-md-4">
-                <input id="addres" name="addres" placeholder="Enter the address of the POI here" class="form-control input-md" type="text">
+                <input id="addres" name="address" ng-model="object.address" placeholder="Enter the address of the POI here" class="form-control input-md" type="text">
                 <span class="help-block">The address of the POI if available</span>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="poiState">State</label>
             <div class="col-md-4">
-                <select id="poiState" name="poiState" class="form-control">
+                <select id="poiState" name="poiState" ng-model="object.state" class="form-control">
                     <option value="NN">Select State or Territory</option>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
@@ -97,7 +97,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="poiZipCode">Zip</label>
             <div class="col-md-4">
-                <input id="poiZipCode" name="poiZipCode" placeholder="Enter Zip or Postal Code" class="form-control input-md" type="text">
+                <input id="poiZipCode" name="poiZipCode" ng-model="object.zipcode" placeholder="Enter Zip or Postal Code" class="form-control input-md" type="text">
                 <span class="help-block">Use the appropriate postal code for your location</span>
             </div>
         </div>
@@ -106,7 +106,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="poiLatitude">Latitude</label>
             <div class="col-md-4">
-                <input id="poiLatitude" name="poiLatitude" placeholder="Enter the latitude of the POI" class="form-control input-md" type="text">
+                <input id="poiLatitude" name="poiLatitude" ng-model="object.latitude" placeholder="Enter the latitude of the POI" class="form-control input-md" type="text">
 
             </div>
         </div>
@@ -115,7 +115,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="poiLongitude">Longitude</label>
             <div class="col-md-4">
-                <input id="poiLongitude" name="poiLongitude" placeholder="Enter the longitude of the POI here" class="form-control input-md" type="text">
+                <input id="poiLongitude" name="poiLongitude" ng-model="object.longitude" placeholder="Enter the longitude of the POI here" class="form-control input-md" type="text">
 
             </div>
         </div>
@@ -124,16 +124,17 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="poiUrl">Website URL</label>
             <div class="col-md-4">
-                <input id="poiUrl" name="poiUrl" placeholder="Enter the URL of the POI website if available" class="form-control input-md" type="text">
+                <input id="poiUrl" name="poiUrl" ng-model="object.url" placeholder="Enter the URL of the POI website if available" class="form-control input-md" type="text">
 
             </div>
         </div>
+        <input id="type" name="type" ng-model="object.type" value="cultural" />
 
         <!-- Button (Double) -->
         <div class="form-group">
             <label class="col-md-4 control-label" for="createPOIBtn">Create Object</label>
             <div class="col-md-8">
-                <button id="createPOIBtn" name="createPOIBtn" class="btn btn-success">Create POI</button>
+                <button id="createPOIBtn" name="createPOIBtn" class="btn btn-success" ng-click="addNewPOI(object)">Create POI</button>
                 <button id="cancelPOIBtn" name="cancelPOIBtn" class="btn btn-danger" ng-click="openPOIList()">Cancel</button>
             </div>
         </div>
