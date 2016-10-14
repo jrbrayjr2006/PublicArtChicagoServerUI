@@ -26,6 +26,22 @@ Parse.serverURL = 'https://parseapi.back4app.com';
 
 var loginApp = angular.module('loginApp', ["ngRoute"]);
 
+loginApp.controller('titleController', function($log, $scope) {
+        console.debug("titleController");
+        $scope.loginTitle = "Public Art Chicago Login";
+        $scope.dashboardTitle = "Public Art Chicago Dashboard";
+    })
+    .controller('loginController', function($log, $scope, loginService) {
+        console.debug("loginController");
+        //$scope.loginTitle = "Public Art Chicago Login";
+        $scope.usernameTitle = "Username";
+        $scope.passwordTitle = "Password";
+
+        $scope.login = function() {
+            console.debug("login()...");
+        };
+    });
+
 app.config(function($routeProvider) {
         $routeProvider.when('dashboard', {templateUrl: "/dashboard.html"})
         .when('login', {
@@ -65,7 +81,23 @@ app.config(function($routeProvider) {
             }
         }
     }])
-    .factory('Objects', function($q) {
+    .directive('file', function() {
+        return {
+            restrict: 'AE',
+            scope: {
+                file: '@'
+            },
+            link: function(scope, el, attrs){
+                el.bind('change', function(event){
+                    var files = event.target.files;
+                    var file = files[0];
+                    scope.file = file;
+                    scope.$parent.file = file;
+                    scope.$apply();
+                });
+            }
+        };
+    }).factory('Objects', function($q) {
         var Objects = Parse.Object.extend("Objects", {
             // Instance methods
         }, {
@@ -106,6 +138,19 @@ app.config(function($routeProvider) {
                 objects.set("url", object.url);
                 objects.set("location", object.location);
                 objects.set("type", object.type);
+                // BEGIN objects not POI
+                objects.set("art_type", object.art_type);
+                objects.set("artists", object.artists);
+                objects.set("benefactors", object.benefactors);
+                objects.set("creation_date", object.creation_date);
+                objects.set("description", object.description);
+                objects.set("measurements", object.measurements);
+                objects.set("history_description", object.history_description);
+                objects.set("narrator_fun_fact", {"__type":"Pointer", "className":"Narrators", "objectId":object.narrator_fun_fact});
+                objects.set("narrator_gen_fact", {"__type":"Pointer", "className":"Narrators", "objectId":object.narrator_gen_fact});
+                objects.set("object_images", object.object_images);
+                objects.set("isDemoObject", object.isDemoObject);
+                // END
                 objects.save(null, {
                     success: function(objects) {
                         if(objects.type == "cultural") {
@@ -114,11 +159,11 @@ app.config(function($routeProvider) {
                             console.debug("Successfully created new Object...");
                         }
                     },
-                    error: function(e) {
+                    error: function(error) {
                         if(object.type == "cultural") {
-                            console.error("Error occurred while creating POI! " + e.message);
+                            console.error("Error occurred while creating POI! " + error.message);
                         } else {
-                            console.error("Error occurred while creating Object! " + e.message);
+                            console.error("Error occurred while creating Object! " + error.message);
                         }
                     }
                 });
@@ -573,6 +618,7 @@ app.config(function($routeProvider) {
         };
     })
     .controller('titleController', function($log, $scope) {
+        console.debug("titleController");
         $scope.loginTitle = "Public Art Chicago Login";
         $scope.dashboardTitle = "Public Art Chicago Dashboard";
     })
@@ -730,13 +776,40 @@ app.config(function($routeProvider) {
             console.debug("::ENTER:: dashboardController.saveNewObject(object)...");
             console.debug("adding object:  " + object.name);
             console.debug(object);
+
+            var images = new Array();
+            //TODO work on getting images -- object.file --
+            images.push($scope.objectsBaseImageUrl + "/test.png");
+
+            // put benefactors in Pointers {"__type":"Pointer", "className":"Sponsor", "objectId":benefactor}
+            console.debug(object.benefactors);
+            var sponsors = [];
+            for(benefactor in object.benefactors) {
+                sponsors.push({"__type":"Pointer", "className":"Sponsor", "objectId":object.benefactors[benefactor]})
+            }
+            //TODO object.benefactors = angular.toJson(sponsors);
+
+            // put artists in Pointers {"__type":"Pointer", "className":"Artists", "objectId":artist}
+            var artists = [];
+            for(artist in object.artists) {
+                console.debug("Artist Id: " + object.artists[artist]);
+                artists.push({"__type":"Pointer", "className":"Artists", "objectId":object.artists[artist]})
+            }
+            //TODO object.artists = angular.toJson(artists).toString();
+
+            object.object_images = images;
+            object.thumbnail = images[0];
+            object.type = "object";
+            console.debug("Images are: " + object.images);
             Objects.saveNewObject(object);
+            /*
             Objects.getAllObjects().then(function(object) {
                 $scope.objects = object;
                 $scope.openObjectList()
             }, function(error) {
                 console.error(error.message);
             });
+            */
             console.debug("::EXIT:: dashboardController.saveNewObject(object)...")
         };
 
