@@ -15,6 +15,10 @@ $(function() {
     });
 });
 
+function pointerBuilder(ojbId) {
+
+}
+
 var app = angular.module('publicArt', ["ngRoute"]);
 var urlPrefix = "/PublicArtChicago";
 //var urlPrefix = "/PAC-dev";
@@ -121,14 +125,15 @@ app.config(function($routeProvider) {
             },
 
             getSelectedObject: function(objId) {
-                console.debug("Objects.getSelectedObject(objId)");
+                console.debug("::ENTER:: Objects.getSelectedObject(objId)");
                 var defer = $q.defer();
                 var query = new Parse.Query(this);
                 //TODO
             },
 
             saveNewObject: function(object) {
-                console.debug("Objects.saveNewObject(object)...");
+                console.debug("::ENTER:: Objects.saveNewObject(object)...");
+                var defer = $q.defer();
                 var objects = new Objects();
                 objects.set("name", object.name);
                 objects.set("address", object.address);
@@ -140,8 +145,10 @@ app.config(function($routeProvider) {
                 objects.set("type", object.type);
                 // BEGIN objects not POI
                 objects.set("art_type", object.art_type);
-                objects.set("artists", object.artists);
-                objects.set("benefactors", object.benefactors);
+                //objects.set("artists", object.artists);
+                objects.set("artists", [{"__type":"Pointer","className":"Artists","objectId":"12ZuvLmfQ3"},{"__type":"Pointer","className":"Artists","objectId":"1kjB57pJ6G"},{"__type":"Pointer","className":"Artists","objectId":"1qZ27Y5unn"}]);
+                //objects.set("benefactors", object.benefactors);
+                objects.set("benefactors", [{"__type":"Pointer","className":"Sponsor","objectId":"1uveJ8cCNB"},{"__type":"Pointer","className":"Sponsor","objectId":"F1i3F9cgIM"}]);
                 objects.set("creation_date", object.creation_date);
                 objects.set("description", object.description);
                 objects.set("measurements", object.measurements);
@@ -150,6 +157,7 @@ app.config(function($routeProvider) {
                 objects.set("narrator_gen_fact", {"__type":"Pointer", "className":"Narrators", "objectId":object.narrator_gen_fact});
                 objects.set("object_images", object.object_images);
                 objects.set("isDemoObject", object.isDemoObject);
+                objects.set("thumbnail", object.thumbnail);
                 // END
                 objects.save(null, {
                     success: function(objects) {
@@ -158,6 +166,9 @@ app.config(function($routeProvider) {
                         } else {
                             console.debug("Successfully created new Object...");
                         }
+                        defer.resolve(objects);
+                        objects.set("id", objects.id);
+                        console.debug("The new objectId for this object is: " + objects.id);
                     },
                     error: function(error) {
                         if(object.type == "cultural") {
@@ -165,13 +176,16 @@ app.config(function($routeProvider) {
                         } else {
                             console.error("Error occurred while creating Object! " + error.message);
                         }
+                        return "Not created";
                     }
                 });
+                console.debug(defer.promise);
+                return defer.promise;
             },
 
 
             deleteObject: function(objId) {
-                console.debug("Objects.deleteObject(objId)...");
+                console.debug("::ENTER:: Objects.deleteObject(objId)...");
                 var objects = new Objects();
                 objects.set("id", objId);
                 objects.destroy({
@@ -182,6 +196,13 @@ app.config(function($routeProvider) {
                         console.error(e.message);
                     }
                 });
+            },
+
+
+            updateObject: function(object) {
+                console.debug("::ENTER:: Objects.updateObject(object)...");
+                //TODO
+                console.debug("::EXIT:: Objects.updateObject(object)...");
             }
         });
 
@@ -634,7 +655,7 @@ app.config(function($routeProvider) {
     })
     .controller('dashboardController', function($log, $scope, dashboardService, Tours, Objects, Artists, Ads, Narrators, POIS, Sponsor) {
         $scope.dashboardTitle = 'Public Art Chicago Dashboard';
-        $scope.objectsBaseImageUrl = 'https://s3.amazonaws.com/public-art-chicago/objects';
+        $scope.objectsBaseImageUrl = 'https://s3.amazonaws.com/public-art-chicago/objects/';
         $scope.baseUrl = urlPrefix;
         $scope.objects = [];
         $scope.artists = [];
@@ -644,6 +665,7 @@ app.config(function($routeProvider) {
         $scope.pois = [];
         $scope.sponsors = [];
         $scope.filename = '';
+        $scope.objectImages = [];
 
         $scope.search = function() {
             console.debug("search()...");
@@ -779,29 +801,66 @@ app.config(function($routeProvider) {
 
             var images = new Array();
             //TODO work on getting images -- object.file --
-            images.push($scope.objectsBaseImageUrl + "/test.png");
+            images.push("test.png");
 
             // put benefactors in Pointers {"__type":"Pointer", "className":"Sponsor", "objectId":benefactor}
             console.debug(object.benefactors);
             var sponsors = [];
             for(benefactor in object.benefactors) {
-                sponsors.push({"__type":"Pointer", "className":"Sponsor", "objectId":object.benefactors[benefactor]})
+                //sponsors.push('{__type:Pointer, className:Sponsor, objectId:' + object.benefactors[benefactor] + '}');
+                var sponsor = new Object();
+                sponsor.__type = "Pointer";
+                sponsor.className = "Sponsor"
+                sponsor.objectId = object.benefactors[benefactor];
+                //sponsors.push(angular.toJson({"__type":"Pointer", "className":"Sponsor", "objectId":object.benefactors[benefactor]}));
+                sponsors.push(angular.toJson(sponsor));
+                console.debug(angular.toJson(sponsor));
             }
-            //TODO object.benefactors = angular.toJson(sponsors);
+            object.benefactors = sponsors;
+            console.debug(object.benefactors);
 
             // put artists in Pointers {"__type":"Pointer", "className":"Artists", "objectId":artist}
             var artists = [];
             for(artist in object.artists) {
                 console.debug("Artist Id: " + object.artists[artist]);
-                artists.push({"__type":"Pointer", "className":"Artists", "objectId":object.artists[artist]})
+                //artists.push('{__type:Pointer, className:Artists, objectId:' + object.artists[artist] + '}');
+                artists.push(angular.toJson({"__type":"Pointer", "className":"Artists", "objectId":object.artists[artist]}));
             }
-            //TODO object.artists = angular.toJson(artists).toString();
+            object.artists = artists;
+            console.debug(object.artists);
 
             object.object_images = images;
             object.thumbnail = images[0];
             object.type = "object";
-            console.debug("Images are: " + object.images);
-            Objects.saveNewObject(object);
+            if(!object.isDemoObject) {
+                object.isDemoObject = false;
+            }
+
+            //Build location object
+            object.location = new Parse.GeoPoint(object.latitude, object.longitude);
+            console.debug(object.location);
+
+            console.debug("Images are: " + object.object_images);
+
+            //TODO temporary local test -- //
+            Objects.saveNewObject(object).then(function(object){
+
+                console.debug("Use " + object.id + " to create image links");
+                object.thumbnail = $scope.buildThumbUrl(object.id);
+                console.debug("The thumbnail URL is " + object.thumbnail);
+
+                $scope.objectImages = new Array();
+                for(var i = 0; i < images.length; i++)
+                {
+                    var imgUrl = $scope.buildSliderImageUrl(object.id, i + 1);
+                    console.debug("The image url is " + imgUrl);
+                    $scope.objectImages.push(imgUrl);
+                }
+                console.debug(object.object_images);
+            });
+
+            object.object_images = $scope.objectImages;
+
             /*
             Objects.getAllObjects().then(function(object) {
                 $scope.objects = object;
@@ -810,7 +869,8 @@ app.config(function($routeProvider) {
                 console.error(error.message);
             });
             */
-            console.debug("::EXIT:: dashboardController.saveNewObject(object)...")
+            console.debug(object);
+            console.debug("::EXIT:: dashboardController.saveNewObject(object)...");
         };
 
         //-- Ads functions --
@@ -953,6 +1013,17 @@ app.config(function($routeProvider) {
                 console.error(error.message);
             });
             alert("The Point of Interest has been deleted!");
+        };
+
+        $scope.buildThumbUrl = function(objId) {
+            var thumbUrl = $scope.objectsBaseImageUrl + objId + "/images/thumb/" + objId + "-thumb.png";
+            return thumbUrl;
+        };
+
+        $scope.buildSliderImageUrl = function(objId, index) {
+            console.debug("::ENTER:: dashboardController.buildSliderImageUrl(objId,index)...");
+            var imageUrl = $scope.objectsBaseImageUrl + objId + "/images/slider/" + objId + "-" + index + ".jpg";
+            return imageUrl;
         };
 
         /**
